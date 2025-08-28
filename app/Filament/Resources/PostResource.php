@@ -59,14 +59,15 @@ class PostResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('id'),
+                TextColumn::make('id')->sortable(),
                 ImageColumn::make('thumbnail'),
-                TextColumn::make('category.name'),
-                TextColumn::make('title')->label('Title'),
-                TextColumn::make('slug')->label('Slug'),
+                TextColumn::make('category.name')->searchable(),
+                TextColumn::make('title')->label('Title')->sortable()->searchable(),
+                TextColumn::make('slug')->label('Slug')->sortable()->searchable(),
                 ColorColumn::make('color'),
-                TextColumn::make('tags'),
-                CheckboxColumn::make('published'),
+                TextColumn::make('tags')->searchable(),
+                CheckboxColumn::make('published')->sortable(),
+                TextColumn::make('created_at')->sortable()->date('Y M'),
             ])
             ->filters([
                 //
