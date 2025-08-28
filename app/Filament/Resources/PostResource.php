@@ -11,6 +11,7 @@ use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\MarkdownEditor;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\TextInput;
@@ -34,20 +35,24 @@ class PostResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('title')->required(),
-                TextInput::make('slug')->required(),
-                MarkdownEditor::make('content')->required(),
-                ColorPicker::make('color')->required(),
-                TagsInput::make('tags')->required(),
+                Section::make()->schema([
+                    TextInput::make('title')->rules(['min:3','max:15'])->required(),
+                    TextInput::make('slug')->rule(['min:3'])->required(),
+                    ColorPicker::make('color')->required(),
+                    TagsInput::make('tags')->required(),
+                    Select::make('category_id')
+                        ->label('Category')
+                        ->options(Category::pluck('name', 'id'))
+                        ->required(),
+                    Select::make('user_id')
+                        ->label('User')
+                        ->options(User::pluck('name', 'id'))
+                        ->required(),
+                ])->columns(2),
+                MarkdownEditor::make('content')->required()->columnSpan(4),
+                FileUpload::make('thumbnail')->disk('public')->directory('thumbnails')->columnSpan(4),
                 Checkbox::make('published')->required(),
-                Select::make('category_id')
-                    ->label('Category')
-                    ->options(Category::pluck('name', 'id')),
-                Select::make('user_id')
-                    ->label('User')
-                    ->options(User::pluck('name', 'id')),
-                FileUpload::make('thumbnail')->disk('public')->directory('thumbnails'),
-            ]);
+            ])->columns(4);
     }
 
     public static function table(Table $table): Table
