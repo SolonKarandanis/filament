@@ -4,9 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\PostResource\Pages;
 use App\Filament\Resources\PostResource\RelationManagers;
-use App\Models\Category;
 use App\Models\Post;
-use App\Models\User;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\FileUpload;
@@ -42,11 +40,11 @@ class PostResource extends Resource
                     TagsInput::make('tags')->required(),
                     Select::make('category_id')
                         ->label('Category')
-                        ->options(Category::pluck('name', 'id'))
+                        ->relationship('category','name')
                         ->required(),
                     Select::make('user_id')
                         ->label('User')
-                        ->options(User::pluck('name', 'id'))
+                        ->relationship('user','name')
                         ->required(),
                 ])->columns(2),
                 MarkdownEditor::make('content')->required()->columnSpan(4),
