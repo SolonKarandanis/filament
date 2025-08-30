@@ -20,6 +20,7 @@ use Filament\Tables\Columns\CheckboxColumn;
 use Filament\Tables\Columns\ColorColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 
 
@@ -68,7 +69,11 @@ class PostResource extends Resource
                 TextColumn::make('created_at')->sortable()->date('Y M'),
             ])
             ->filters([
-                //
+               Filter::make('Published Posts')->query(
+                   function ($query) {
+                       return $query->where('published', true);
+                   }
+               )
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
